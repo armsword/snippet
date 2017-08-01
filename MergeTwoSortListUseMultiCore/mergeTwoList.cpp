@@ -26,7 +26,7 @@ void* merge(void *arg) {
     int second_size = p->second_size_end;
     int begin = p->first_size_begin;
     int end = p->second_size_begin;
-    p->value.resize((first_size - begin) + (second_size - end));
+    p->value.reserve((first_size - begin) + (second_size - end));
  
     //std::cout << "first begin size: " << begin << " first end size: " << first_size << " second begin size: " << end << " second end size: " << second_size << std::endl;
     while (begin < first_size && end < second_size) {
@@ -141,12 +141,12 @@ int main() {
     load_data(first, second);
 
     // 单线程merge时间统计
-    //common(first, second);
+    common(first, second);
     
     // 2个线程merge时间统计
-    //use_two_thread(first, second, 2);
+    use_two_thread(first, second, 2);
 
     // 4个线程merge时间统计
-    use_four_thread(first, second, 4);
+    //use_four_thread(first, second, 4);
     return 0;
 }
