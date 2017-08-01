@@ -26,8 +26,9 @@ void* merge(void *arg) {
     int second_size = p->second_size_end;
     int begin = p->first_size_begin;
     int end = p->second_size_begin;
+    p->value.resize((first_size - begin) + (second_size - end));
  
-    //std::cout << "first begin size: " << i << " first end size: " << first_size << " second begin size: " << j << " second end size: " << second_size << std::endl;
+    //std::cout << "first begin size: " << begin << " first end size: " << first_size << " second begin size: " << end << " second end size: " << second_size << std::endl;
     while (begin < first_size && end < second_size) {
         if ((*p->first)[begin] < (*p->second)[end]) {
             p->value.push_back((*p->first)[begin]);
@@ -52,7 +53,7 @@ void* merge(void *arg) {
         end++;
     }
     
-    std::cout << "value size is " << p->value.size() << std::endl;
+    //std::cout << "value size is " << p->value.size() << std::endl;
     return NULL;
 }
 
@@ -63,7 +64,7 @@ void create_n_thread(const std::vector<int> &first, const std::vector<int> &seco
     ARG arg[thread_count];
     int pos = 0;
     for (size_t i = 0; i < thread_count; i++) {
-        std::cout << "pos is " << pos << " value is " << second[pos] << std::endl;
+        //std::cout << "pos is " << pos << " value is " << second[pos] << std::endl;
         arg[i].first = &first;
         arg[i].first_size_begin = first.size() * i / thread_count;
         arg[i].first_size_end = first.size() * (i + 1) / thread_count;
@@ -140,12 +141,12 @@ int main() {
     load_data(first, second);
 
     // 单线程merge时间统计
-    common(first, second);
+    //common(first, second);
     
-    //2个线程merge时间统计
-    use_two_thread(first, second, 2);
+    // 2个线程merge时间统计
+    //use_two_thread(first, second, 2);
 
-    //4个线程merge时间统计
+    // 4个线程merge时间统计
     use_four_thread(first, second, 4);
     return 0;
 }
