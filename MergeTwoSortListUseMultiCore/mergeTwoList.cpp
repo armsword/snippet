@@ -26,34 +26,37 @@ void* merge(void *arg) {
     int second_size = p->second_size_end;
     int begin = p->first_size_begin;
     int end = p->second_size_begin;
-    p->value.reserve((first_size - begin) + (second_size - end));
+    p->value.resize((first_size - begin) + (second_size - end));
  
     //std::cout << "first begin size: " << begin << " first end size: " << first_size << " second begin size: " << end << " second end size: " << second_size << std::endl;
+    int i = 0;
     while (begin < first_size && end < second_size) {
         if ((*p->first)[begin] < (*p->second)[end]) {
-            p->value.push_back((*p->first)[begin]);
+            p->value[i] = (*p->first)[begin];
             begin++;
         } else if ((*p->first)[begin] > (*p->second)[end]){
-            p->value.push_back((*p->second)[end]);
+            p->value[i] = (*p->second)[end];
             end++;
         } else {
-            p->value.push_back((*p->second)[begin]);
+            p->value[i] = (*p->second)[begin];
             begin++;
             end++;
         }
+        i++;
     }
 
     while (begin < first_size) {
-        p->value.push_back((*p->first)[begin]);
+        p->value[i] = (*p->first)[begin];
         begin++;
+        i++;
     }
 
     while (end < second_size) {
-        p->value.push_back((*p->second)[end]);
+        p->value[i] = (*p->second)[end];
         end++;
+        i++;
     }
-    
-    //std::cout << "value size is " << p->value.size() << std::endl;
+    p->value.resize(i);
     return NULL;
 }
 
@@ -74,7 +77,7 @@ void create_n_thread(const std::vector<int> &first, const std::vector<int> &seco
             arg[i].second_size_end = second.size();
         } else {
             pos = lower_bound(second.begin(), second.end(), first[first.size() * (i + 1) / thread_count]) - second.begin();
-            arg[i].second_size_end = pos; // + 1 
+            arg[i].second_size_end = pos; 
         }
     }
     
@@ -147,6 +150,6 @@ int main() {
     use_two_thread(first, second, 2);
 
     // 4个线程merge时间统计
-    //use_four_thread(first, second, 4);
+    use_four_thread(first, second, 4);
     return 0;
 }
